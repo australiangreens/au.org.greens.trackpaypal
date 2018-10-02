@@ -186,14 +186,14 @@ function trackpaypal_civicrm_buildForm($formName, &$form) {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_postProcess/
  */
-function trackpaypal_civicrm_postProcess($formName, &$form) {
-  if ($formName === 'CRM_Contribute_Form_Contribution_Main' && $form->getVar('_values')['is_confirm_enabled'] === '1'
-    || $formName === 'CRM_Contribute_Form_Contribution_Confirm') {
+//function trackpaypal_civicrm_postProcess($formName, &$form) {
+//  if ($formName === 'CRM_Contribute_Form_Contribution_Main' && $form->getVar('_values')['is_confirm_enabled'] === '1'
+//    || $formName === 'CRM_Contribute_Form_Contribution_Confirm') {
 
     // Store the GA id for hand-off to the PayPal processor call
 
-  }
-}
+//  }
+//}
 
 /**
  * Implements hook_civicrm_alterPaymentProcessorParams().
