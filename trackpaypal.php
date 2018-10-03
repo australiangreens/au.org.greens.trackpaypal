@@ -203,7 +203,7 @@ function trackpaypal_civicrm_buildForm($formName, &$form) {
 function trackpaypal_civicrm_alterPaymentProcessorParams($paymentObj,&$rawParams, &$cookedParams) {
   // Eway Payment Processor sometimes passes $cookedParams as an instance of GatewayRequest class
   // PHP complains if you try and use it as an array and we don't care about it in this instnce so return.
-  if ($coodParams instanceof GatewayRequest) {
+  if ($cookedParams instanceof GatewayRequest) {
     return;
   }
   else {
