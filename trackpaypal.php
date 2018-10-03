@@ -201,7 +201,16 @@ function trackpaypal_civicrm_buildForm($formName, &$form) {
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterPaymentProcessorParams/
  */
 function trackpaypal_civicrm_alterPaymentProcessorParams($paymentObj,&$rawParams, &$cookedParams) {
-  $customPayload = json_decode($cookedParams['custom'], true);
-  $customPayload += ['gcid' => $rawParams['gcid']];
-  $cookedParams['custom'] = json_encode($customPayload);
+  // Eway Payment Processor sometimes passes $cookedParams as an instance of GatewayRequest class
+  // PHP complains if you try and use it as an array and we don't care about it in this instnce so return.
+  if ($coodParams instanceof GatewayRequest) {
+    return;
+  }
+  else {
+    if (isset($cookedParams['custom'])) {
+      $customPayload = json_decode($cookedParams['custom'], true);
+      $customPayload += ['gcid' => $rawParams['gcid']];
+      $cookedParams['custom'] = json_encode($customPayload);
+    }
+  }
 }
