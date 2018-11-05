@@ -22,7 +22,6 @@ class CRM_Trackpaypal_Form_Settings extends CRM_Core_Form {
   public function buildQuickForm() {
     $settings = $this->getFormSettings();
     foreach ($settings as $name => $setting) {
-      drupal_set_message(json_encode($setting));
       if (isset($setting['quick_form_type'])) {
         $options = NULL;
         if (isset($setting['pseudoconstant'])) {
