@@ -173,6 +173,9 @@ function trackpaypal_civicrm_buildForm($formName, &$form) {
     // Is it a PayPal processor?
     $processorTypeId = $form->getVar('_paymentProcessor')['payment_processor_type_id'];
 
+    // Add a hidden field to the form with the id/key 'gcid'
+    // JavaScript code in the template will populate it
+    // with the Google Analytics client from the visitor's browser
     $templatePath = realpath(dirname(__FILE__)."/templates");
     $form->add('hidden', 'gcid', '');
     CRM_Core_Region::instance('page-body')->add(array(
@@ -182,25 +185,13 @@ function trackpaypal_civicrm_buildForm($formName, &$form) {
 }
 
 /**
- * Implements hook_civicrm_postProcess().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_postProcess/
- */
-//function trackpaypal_civicrm_postProcess($formName, &$form) {
-//  if ($formName === 'CRM_Contribute_Form_Contribution_Main' && $form->getVar('_values')['is_confirm_enabled'] === '1'
-//    || $formName === 'CRM_Contribute_Form_Contribution_Confirm') {
-
-    // Store the GA id for hand-off to the PayPal processor call
-
-//  }
-//}
-
-/**
  * Implements hook_civicrm_alterPaymentProcessorParams().
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterPaymentProcessorParams/
  */
 function trackpaypal_civicrm_alterPaymentProcessorParams($paymentObj,&$rawParams, &$cookedParams) {
+  $cookedParams['notify_url'] = 'http://mrlavalava.hopto.org:5555/civicrm/payment/ipn/3?';
+  watchdog('paypal','Params: %params', array('%params' => print_r($cookedParams, true)), WATCHDOG_DEBUG);
   // Eway Payment Processor sometimes passes $cookedParams as an instance of GatewayRequest class
   // PHP complains if you try and use it as an array and we don't care about it in this instnce so return.
   if ($cookedParams instanceof GatewayRequest) {
@@ -208,9 +199,20 @@ function trackpaypal_civicrm_alterPaymentProcessorParams($paymentObj,&$rawParams
   }
   else {
     if (isset($cookedParams['custom'])) {
+      // Add the Google Analytics client ID value
+      // to the JSON encoded 'custom' attribute
+      // of the payload that goes to PayPal
       $customPayload = json_decode($cookedParams['custom'], true);
       $customPayload += ['gcid' => $rawParams['gcid']];
       $cookedParams['custom'] = json_encode($customPayload);
     }
   }
+}
+
+function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
+  // We've captured the IPN packet
+  // Now we want to retrieve the Google Client ID
+  // and transaction details to send to Google Analytics
+  // via its REST interface
+  watchdog('paypal','IPN payload: %payload', array('%payload' => print_r($IPNData, true)), WATCHDOG_DEBUG);
 }
