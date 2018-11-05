@@ -34,18 +34,13 @@
 /*
  * Settings metadata file
  */
-$event_types = array(
-  'standard' => 'standard',
-  'ecommerce' => 'ecommerce'
-);
-
 return array(
   'trackpaypal_event_type' => array(
     'group_name' => 'trackpaypal',
     'group' => 'trackpaypal',
     'name' => 'trackpaypal_event_type',
     'filter' => 'trackpaypal',
-    'type' => 'Array',
+    'type' => 'String',
     'add' => '4.7',
     'is_domain' => 1,
     'is_contact' => 0,
@@ -53,7 +48,9 @@ return array(
     'title' => 'Google Analytics event type',
     'default' => array('ecommerce'),
     'html_type' => 'Select',
-    'html_attributes' => $event_types,
+    'pseudoconstant' => array(
+      'callback' => 'CRM_Trackpaypal_Form_Settings::eventTypes',
+    ),
     'quick_form_type' => 'Element',
   ),
   'trackpaypal_tracking_code' => array(
@@ -66,11 +63,11 @@ return array(
     'is_domain' => 1,
     'is_contact' => 0,
     'description' => 'Google Analytics tracking code (UA-XXXXXX-X)',
-    'title' => 'Google Analytics event type',
+    'title' => 'Google Analytics Tracking Code',
     'html_type' => 'Text',
     'html_attributes' => array(
       'size' => 11,
-      'maxlength' => 11
+      'maxlength' => 11,
     ),
     'quick_form_type' => 'Element',
   ),

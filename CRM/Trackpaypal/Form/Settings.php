@@ -8,48 +8,54 @@ use CRM_Trackpaypal_ExtensionUtil as E;
  * @see https://wiki.civicrm.org/confluence/display/CRMDOC/QuickForm+Reference
  */
 class CRM_Trackpaypal_Form_Settings extends CRM_Core_Form {
+
+  public static function eventTypes() {
+    return array(
+      'standard' => 'standard',
+      'ecommerce' => 'ecommerce',
+    );
+  }
+
   private $_settingFilter = array('group' => 'trackpaypal');
   private $_submittedValues = array();
   private $_settings = array();
-  function buildQuickForm() {
+  public function buildQuickForm() {
     $settings = $this->getFormSettings();
     foreach ($settings as $name => $setting) {
+      drupal_set_message(json_encode($setting));
       if (isset($setting['quick_form_type'])) {
+        $options = NULL;
+        if (isset($setting['pseudoconstant'])) {
+          $options = civicrm_api3('Setting', 'getoptions', array('field' => $name));
+        }
         $add = 'add' . $setting['quick_form_type'];
         if ($add == 'addElement') {
-          $this->$add($setting['html_type'], $name, ts($setting['title']), CRM_Utils_Array::value('html_attributes', $setting, array ()));
-        }
-        elseif ($setting['html_type'] == 'Select') {
-          $optionValues = array();
-          if (!empty($setting['pseudoconstant'])) {
-            if(!empty($setting['pseudoconstant']['optionGroupName'])) {
-              $optionValues = CRM_Core_OptionGroup::values($setting['pseudoconstant']['optionGroupName'], FALSE, FALSE, FALSE, NULL, 'name');
-            }
-            elseif (!empty($setting['pseudoconstant']['callback'])) {
-              $cb = Civi\Core\Resolver::singleton()->get($setting['pseudoconstant']['callback']);
-              $optionValues = call_user_func_array($cb, $optionValues);
-            }
-          }
-          $this->add('select', $setting['name'], $setting['title'], $optionValues, FALSE, $setting['html_attributes']);
+          $this->$add(
+            $setting['html_type'],
+            $name,
+            ts($setting['title']),
+            ($options !== NULL) ? $options['values'] : CRM_Utils_Array::value('html_attributes', $setting, array()),
+            ($options !== NULL) ? CRM_Utils_Array::value('html_attributes', $setting, array()) : NULL
+          );
         }
         else {
           $this->$add($name, ts($setting['title']));
         }
-        $this->assign("{$setting['description']}_description", ts('description'));
+        $this->assign("{$name}_description", $setting['description']);
       }
     }
     $this->addButtons(array(
-      array (
+      array(
         'type' => 'submit',
         'name' => ts('Submit'),
         'isDefault' => TRUE,
-      )
+      ),
     ));
     // export form elements
     $this->assign('elementNames', $this->getRenderableElementNames());
     parent::buildQuickForm();
   }
-  function postProcess() {
+  public function postProcess() {
     $this->_submittedValues = $this->exportValues();
     $this->saveSettings();
     parent::postProcess();
@@ -59,7 +65,7 @@ class CRM_Trackpaypal_Form_Settings extends CRM_Core_Form {
    *
    * @return array (string)
    */
-  function getRenderableElementNames() {
+  public function getRenderableElementNames() {
     // The _elements list includes some items which should not be
     // auto-rendered in the loop -- such as "qfKey" and "buttons". These
     // items don't have labels. We'll identify renderable by filtering on
@@ -78,20 +84,16 @@ class CRM_Trackpaypal_Form_Settings extends CRM_Core_Form {
    *
    * @return array
    */
-  function getFormSettings() {
+  public function getFormSettings() {
     if (empty($this->_settings)) {
       $settings = civicrm_api3('setting', 'getfields', array('filters' => $this->_settingFilter));
     }
-    $extraSettings = civicrm_api3('setting', 'getfields', array('filters' => array('group' => 'trackpaypal')));
-    $settings = $settings['values'] + $extraSettings['values'];
-    return $settings;
+    return $settings['values'];
   }
   /**
    * Get the settings we are going to allow to be set on this form.
-   *
-   * @return array
    */
-  function saveSettings() {
+  public function saveSettings() {
     $settings = $this->getFormSettings();
     $values = array_intersect_key($this->_submittedValues, $settings);
     civicrm_api3('setting', 'create', $values);
@@ -101,7 +103,7 @@ class CRM_Trackpaypal_Form_Settings extends CRM_Core_Form {
    *
    * @see CRM_Core_Form::setDefaultValues()
    */
-  function setDefaultValues() {
+  public function setDefaultValues() {
     $existing = civicrm_api3('setting', 'get', array('return' => array_keys($this->getFormSettings())));
     $defaults = array();
     $domainID = CRM_Core_Config::domainID();
@@ -110,4 +112,5 @@ class CRM_Trackpaypal_Form_Settings extends CRM_Core_Form {
     }
     return $defaults;
   }
+
 }
