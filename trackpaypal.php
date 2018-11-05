@@ -150,17 +150,18 @@ function trackpaypal_civicrm_preProcess($formName, &$form) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
  *
+ */
 function trackpaypal_civicrm_navigationMenu(&$menu) {
-  _trackpaypal_civix_insert_navigation_menu($menu, 'Mailings', array(
-    'label' => E::ts('New subliminal message'),
-    'name' => 'mailing_subliminal_message',
-    'url' => 'civicrm/mailing/subliminal',
-    'permission' => 'access CiviMail',
+  _trackpaypal_civix_insert_navigation_menu($menu, 'Administer', array(
+    'label' => E::ts('PayPal Tracking'),
+    'name' => 'trackpaypal_settings',
+    'url' => 'civicrm/trackpaypal/settings',
+    'permission' => 'administer CiviCRM',
     'operator' => 'OR',
     'separator' => 0,
   ));
   _trackpaypal_civix_navigationMenu($menu);
-} // */
+}
 
 /**
  * Implements hook_civicrm_buildForm().
