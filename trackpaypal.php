@@ -190,14 +190,14 @@ function trackpaypal_civicrm_buildForm($formName, &$form) {
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterPaymentProcessorParams/
  */
 function trackpaypal_civicrm_alterPaymentProcessorParams($paymentObj,&$rawParams, &$cookedParams) {
-  $cookedParams['notify_url'] = 'http://mrlavalava.hopto.org:5555/civicrm/payment/ipn/3?';
-  watchdog('paypal','Params: %params', array('%params' => print_r($cookedParams, true)), WATCHDOG_DEBUG);
   // Eway Payment Processor sometimes passes $cookedParams as an instance of GatewayRequest class
   // PHP complains if you try and use it as an array and we don't care about it in this instnce so return.
   if ($cookedParams instanceof GatewayRequest) {
     return;
   }
   else {
+    $cookedParams['notify_url'] = 'http://mrlavalava.hopto.org:5555/civicrm/payment/ipn/3?';
+    watchdog('paypal','Params: %params', array('%params' => print_r($cookedParams, true)), WATCHDOG_DEBUG);
     if (isset($cookedParams['custom'])) {
       // Add the Google Analytics client ID value
       // to the JSON encoded 'custom' attribute
