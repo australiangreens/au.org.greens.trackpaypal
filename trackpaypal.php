@@ -150,17 +150,18 @@ function trackpaypal_civicrm_preProcess($formName, &$form) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
  *
+ */
 function trackpaypal_civicrm_navigationMenu(&$menu) {
-  _trackpaypal_civix_insert_navigation_menu($menu, 'Mailings', array(
-    'label' => E::ts('New subliminal message'),
-    'name' => 'mailing_subliminal_message',
-    'url' => 'civicrm/mailing/subliminal',
-    'permission' => 'access CiviMail',
+  _trackpaypal_civix_insert_navigation_menu($menu, 'Administer', array(
+    'label' => E::ts('PayPal Tracking'),
+    'name' => 'trackpaypal_settings',
+    'url' => 'civicrm/trackpaypal/settings',
+    'permission' => 'administer CiviCRM',
     'operator' => 'OR',
     'separator' => 0,
   ));
   _trackpaypal_civix_navigationMenu($menu);
-} // */
+}
 
 /**
  * Implements hook_civicrm_buildForm().
@@ -176,10 +177,10 @@ function trackpaypal_civicrm_buildForm($formName, &$form) {
     // Add a hidden field to the form with the id/key 'gcid'
     // JavaScript code in the template will populate it
     // with the Google Analytics client from the visitor's browser
-    $templatePath = realpath(dirname(__FILE__)."/templates");
+    $templatePath = realpath(dirname(__FILE__) . "/templates");
     $form->add('hidden', 'gcid', '');
     CRM_Core_Region::instance('page-body')->add(array(
-      'template' => "{$templatePath}/trackpaypal.tpl"
+      'template' => "{$templatePath}/trackpaypal.tpl",
     ));
   }
 }
@@ -202,7 +203,7 @@ function trackpaypal_civicrm_alterPaymentProcessorParams($paymentObj,&$rawParams
       // Add the Google Analytics client ID value
       // to the JSON encoded 'custom' attribute
       // of the payload that goes to PayPal
-      $customPayload = json_decode($cookedParams['custom'], true);
+      $customPayload = json_decode($cookedParams['custom'], TRUE);
       $customPayload += ['gcid' => $rawParams['gcid']];
       $cookedParams['custom'] = json_encode($customPayload);
     }
@@ -214,5 +215,5 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   // Now we want to retrieve the Google Client ID
   // and transaction details to send to Google Analytics
   // via its REST interface
-  watchdog('paypal','IPN payload: %payload', array('%payload' => print_r($IPNData, true)), WATCHDOG_DEBUG);
+  watchdog('paypal', 'IPN payload: %payload', array('%payload' => print_r($IPNData, TRUE)), WATCHDOG_DEBUG);
 }
