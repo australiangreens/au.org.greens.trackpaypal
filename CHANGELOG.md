@@ -23,3 +23,4 @@ The extension is licensed under [AGPL-3.0](LICENSE.txt).
 ### Added
 
 * Admin form for extension settings (incomplete)
+* Menu item for admin form
