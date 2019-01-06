@@ -197,7 +197,6 @@ function trackpaypal_civicrm_alterPaymentProcessorParams($paymentObj,&$rawParams
     return;
   }
   else {
-    $cookedParams['notify_url'] = 'http://mrlavalava.hopto.org:5555/civicrm/payment/ipn/3?';
     watchdog('paypal','Params: %params', array('%params' => print_r($cookedParams, true)), WATCHDOG_DEBUG);
     if (isset($cookedParams['custom'])) {
       // Add the Google Analytics client ID value
