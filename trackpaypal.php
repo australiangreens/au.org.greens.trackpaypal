@@ -171,8 +171,6 @@ function trackpaypal_civicrm_navigationMenu(&$menu) {
 function trackpaypal_civicrm_buildForm($formName, &$form) {
   if ($formName === 'CRM_Contribute_Form_Contribution_Main'
     || $formName === 'CRM_Contribute_Form_Contribution_Confirm') {
-    // Is it a PayPal processor?
-    $processorTypeId = $form->getVar('_paymentProcessor')['payment_processor_type_id'];
 
     // Add a hidden field to the form with the id/key 'gcid'
     // JavaScript code in the template will populate it

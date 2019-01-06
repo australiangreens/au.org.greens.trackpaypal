@@ -1,4 +1,4 @@
-{* template block that adds Thermometer related fields *}
+{* template block that adds Google Analytics related fields *}
 <div>{$form.gcid.html}</div>
 {literal}
 <script type="text/javascript">
