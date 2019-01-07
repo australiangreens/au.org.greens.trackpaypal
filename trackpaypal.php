@@ -235,10 +235,10 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   $currency = $IPNData['mc_currency'];
 
   // Construct HTTP request object
-  $client = new GuzzleHttp\Client(['base_uri' => 'http://mrlavalava.hopto.org:8000']);
+  $client = new GuzzleHttp\Client(['base_uri' => 'https://www.google-analytics.com']);
 
   if ($event_type == 'ecommerce') {
-    $result = $client->request('POST', '/1p0c1co1', [
+    $result = $client->request('POST', '/collect', [
       'form_params' => [
         'v' => '1',
         'tid' => $tracking_code,
@@ -251,7 +251,7 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
     ]);
   }
   else if ($event_type == 'standard') {
-    $result = $client->request('POST', '/1p0c1co1', [
+    $result = $client->request('POST', '/collect', [
       'form_params' => [
         'v' => '1',
         'tid' => $tracking_cide,
