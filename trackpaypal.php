@@ -216,7 +216,7 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
     $event_type = Civi::settings()->get('trackpaypal_event_type');
     $tracking_code = Civi::settings()->get('trackpaypal_tracking_code');
     $event_category = Civi::settings()->get('trackpaypal_event_category');
-    if ($event_category = "") { $event_category = 'Transaction' };
+    if ($event_category = "") { $event_category = 'Transaction'; }
 
   // Check the GA Code is of valid syntax
   // If not we do nothing
