@@ -215,10 +215,8 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   watchdog('paypal', 'IPN payload: %payload', array('%payload' => print_r($IPNData, TRUE)), WATCHDOG_DEBUG);
 
   // Retrieve extension settings
-  $result = civicrm_api3('setting', 'get', ['return' => ['trackpaypal_event_type'],]);
-  $event_type = Civi::settings->get('trackpaypal_event_type');
-  $result = civicrm_api3('setting', 'get', ['return' => ['trackpaypal_tracking_code'],]);
-  $tracking_code = $result['values']['1']['trackpaypal_tracking_code'];
+    $event_type = Civi::settings->get('trackpaypal_event_type');
+    $tracking_code = Civi::settings->get('trackpaypal_tracking_code');
 
   // Check the GA Code is of valid syntax
   // If not we do nothing
