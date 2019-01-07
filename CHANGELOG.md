@@ -9,6 +9,7 @@ The extension is licensed under [AGPL-3.0](LICENSE.txt).
 * Fixed typo in variable name
 * New option to send ecommerce transaction _and_ event, alongside one or the other
 * Simpler language for settings page field labels
+* Changed standard event label and value to use Civi form ID and PayPal trxn ID respectively
 
 ## 0.1.0 - 2018-11-06
 

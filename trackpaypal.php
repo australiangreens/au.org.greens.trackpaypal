@@ -215,6 +215,8 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   // Retrieve extension settings
     $event_type = Civi::settings()->get('trackpaypal_event_type');
     $tracking_code = Civi::settings()->get('trackpaypal_tracking_code');
+    $event_category = Civi::settings()->get('trackpaypal_event_category');
+    if ($event_category = "") { $event_category = 'Transaction' };
 
   // Check the GA Code is of valid syntax
   // If not we do nothing
@@ -226,6 +228,7 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   // Retrieve IPN packet data
   $customPayload = json_decode($IPNData['custom'], TRUE);
   $gcid = $customPayload['gcid'];
+  $form_id = $customPayload['contributionPageID'];
   $trxn_id = $IPNData['txn_id'];
   $revenue = $IPNData['mc_gross'];
   $currency = $IPNData['mc_currency'];
@@ -253,10 +256,10 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
         'tid' => $tracking_code,
         'cid' => $gcid,
         't' => 'event',
-        'ec' => 'transaction',
+        'ec' => $event_category,
         'ea' => 'purchase',
-        'el' => $trxn_id,
-        'ev' => $revenue,
+        'el' => $form_id,
+        'ev' => $trxn_id,
       ]
     ]);
   }
@@ -278,10 +281,10 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
         'tid' => $tracking_code,
         'cid' => $gcid,
         't' => 'event',
-        'ec' => 'transaction',
+        'ec' => $event_category,
         'ea' => 'purchase',
-        'el' => $trxn_id,
-        'ev' => $revenue,
+        'el' => $form_id,
+        'ev' => $trxn_id,
       ]
     ]);
   }
