@@ -195,7 +195,6 @@ function trackpaypal_civicrm_alterPaymentProcessorParams($paymentObj,&$rawParams
     return;
   }
   else {
-    watchdog('paypal','Params: %params', array('%params' => print_r($cookedParams, true)), WATCHDOG_DEBUG);
     if (isset($cookedParams['custom'])) {
       // Add the Google Analytics client ID value
       // to the JSON encoded 'custom' attribute
@@ -212,5 +211,58 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   // Now we want to retrieve the Google Client ID
   // and transaction details to send to Google Analytics
   // via its REST interface
-  watchdog('paypal', 'IPN payload: %payload', array('%payload' => print_r($IPNData, TRUE)), WATCHDOG_DEBUG);
+
+  // Retrieve extension settings
+    $event_type = Civi::settings->get('trackpaypal_event_type');
+    $tracking_code = Civi::settings->get('trackpaypal_tracking_code');
+
+  // Check the GA Code is of valid syntax
+  // If not we do nothing
+  if (!trackpaypal_isGACode($tracking_code)) {
+    Civi::log()->warning('GA Code invalid: {code}', array('code' => $tracking_code));
+    return;
+  }
+
+  // Retrieve IPN packet data
+  $customPayload = json_decode($IPNData['custom'], TRUE);
+  $gcid = $customPayload['gcid'];
+  $trxn_id = $IPNData['txn_id'];
+  $revenue = $IPNData['mc_gross'];
+  $currency = $IPNData['mc_currency'];
+
+  // Construct HTTP request object
+  $client = new GuzzleHttp\Client(['base_uri' => 'https://www.google-analytics.com']);
+
+  if ($event_type == 'ecommerce') {
+    $result = $client->request('POST', '/collect', [
+      'form_params' => [
+        'v' => '1',
+        'tid' => $tracking_code,
+        'cid' => $gcid,
+        't' => 'transaction',
+        'ti' => $trxn_id,
+        'tr' => $revenue,
+        'cu' => $currency,
+      ]
+    ]);
+  }
+  else if ($event_type == 'standard') {
+    $result = $client->request('POST', '/collect', [
+      'form_params' => [
+        'v' => '1',
+        'tid' => $tracking_cide,
+        'cid' => $gcid,
+        't' => 'event',
+        'ec' => 'transaction',
+        'ea' => 'purchase',
+        'el' => $trxn_id,
+        'ev' => $revenue,
+      ]
+    ]);
+  }
+
+}
+
+function trackpaypal_isGACode($str) {
+  return (bool) preg_match('/^ua-\d{4,10}(-\d{1,4})?$/i', $str);
 }

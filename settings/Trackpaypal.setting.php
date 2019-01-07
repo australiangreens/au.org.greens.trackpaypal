@@ -66,8 +66,8 @@ return array(
     'title' => 'Google Analytics Tracking Code',
     'html_type' => 'Text',
     'html_attributes' => array(
-      'size' => 12,
-      'maxlength' => 11,
+      'size' => 18,
+      'maxlength' => 16,
     ),
     'quick_form_type' => 'Element',
   ),
