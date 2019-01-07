@@ -1,4 +1,4 @@
-{* template block that adds Google Analytics related fields *}
+{* template block that captures the Google Analytics client ID *}
 <div>{$form.gcid.html}</div>
 {literal}
 <script type="text/javascript">

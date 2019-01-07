@@ -213,4 +213,60 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   // and transaction details to send to Google Analytics
   // via its REST interface
   watchdog('paypal', 'IPN payload: %payload', array('%payload' => print_r($IPNData, TRUE)), WATCHDOG_DEBUG);
+
+  // Retrieve extension settings
+  $result = civicrm_api3('setting', 'get', ['return' => ['trackpaypal_event_type'],]);
+  $event_type = $result['values']['1']['trackpaypal_event_type'];
+  $result = civicrm_api3('setting', 'get', ['return' => ['trackpaypal_tracking_code'],]);
+  $tracking_code = $result['values']['1']['trackpaypal_tracking_code'];
+
+  // Check the GA Code is of valid syntax
+  // If not we do nothing
+  if (!trackpaypal_isGACode($tracking_code)) {
+    watchdog('paypal', 'GA Code invalid: %code ', array('%code' => $tracking_code), WATCHDOG_DEBUG);
+    return;
+  }
+
+  // Retrieve IPN packet data
+  $customPayload = json_decode($IPNData['custom'], TRUE);
+  $gcid = $customPayload['gcid'];
+  $trxn_id = $IPNData['txn_id'];
+  $revenue = $IPNData['mc_gross'];
+  $currency = $IPNData['mc_currency'];
+
+  // Construct HTTP request object
+  $client = new GuzzleHttp\Client(['base_uri' => 'http://mrlavalava.hopto.org:8000']);
+
+  if ($event_type == 'ecommerce') {
+    $result = $client->request('POST', '/1p0c1co1', [
+      'form_params' => [
+        'v' => '1',
+        'tid' => $tracking_code,
+        'cid' => $gcid,
+        't' => 'transaction',
+        'ti' => $trxn_id,
+        'tr' => $revenue,
+        'cu' => $currency,
+      ]
+    ]);
+  }
+  else if ($event_type == 'standard') {
+    $result = $client->request('POST', '/1p0c1co1', [
+      'form_params' => [
+        'v' => '1',
+        'tid' => $tracking_cide,
+        'cid' => $gcid,
+        't' => 'event',
+        'ec' => 'transaction',
+        'ea' => 'purchase',
+        'el' => $trxn_id,
+        'ev' => $revenue,
+      ]
+    ]);
+  }
+
+}
+
+function trackpaypal_isGACode($str) {
+  return (bool) preg_match('/^ua-\d{4,10}(-\d{1,4})?$/i', $str);
 }
