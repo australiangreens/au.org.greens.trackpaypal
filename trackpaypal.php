@@ -250,7 +250,7 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
     $result = $client->request('POST', '/collect', [
       'form_params' => [
         'v' => '1',
-        'tid' => $tracking_cide,
+        'tid' => $tracking_code,
         'cid' => $gcid,
         't' => 'event',
         'ec' => 'transaction',
@@ -260,7 +260,31 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
       ]
     ]);
   }
-
+  else if ($event_type == 'both') {
+    $result = $client->request('POST', '/collect', [
+      'form_params' => [
+        'v' => '1',
+        'tid' => $tracking_code,
+        'cid' => $gcid,
+        't' => 'transaction',
+        'ti' => $trxn_id,
+        'tr' => $revenue,
+        'cu' => $currency,
+      ]
+    ]);
+    $result = $client->request('POST', '/collect', [
+      'form_params' => [
+        'v' => '1',
+        'tid' => $tracking_code,
+        'cid' => $gcid,
+        't' => 'event',
+        'ec' => 'transaction',
+        'ea' => 'purchase',
+        'el' => $trxn_id,
+        'ev' => $revenue,
+      ]
+    ]);
+  }
 }
 
 function trackpaypal_isGACode($str) {

@@ -12,8 +12,10 @@
     <div class="content">{$form.$elementName.html}<br>
       {if $elementName eq "trackpaypal_event_type"}
         {$trackpaypal_event_type_description}
-      {else}
+      {elseif $elementName eq "trackpaypal_tracking_code"}
         {$trackpaypal_tracking_code_description}
+      {else}
+        {$trackpaypal_event_category_description}
       {/if}
     </div>
     <div class="clear"></div>

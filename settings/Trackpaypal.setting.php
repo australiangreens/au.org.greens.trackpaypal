@@ -44,8 +44,8 @@ return array(
     'add' => '4.7',
     'is_domain' => 1,
     'is_contact' => 0,
-    'description' => 'Google Analytics event type sent when PayPal IPN received',
-    'title' => 'Google Analytics event type',
+    'description' => 'Send eCommerce Transaction, standard Event or both to Google Analytics?',
+    'title' => 'Data to send to GA',
     'default' => array('ecommerce'),
     'html_type' => 'Select',
     'pseudoconstant' => array(
@@ -63,7 +63,7 @@ return array(
     'is_domain' => 1,
     'is_contact' => 0,
     'description' => 'Google Analytics tracking code (UA-XXXXXX-X)',
-    'title' => 'Google Analytics Tracking Code',
+    'title' => 'Tracking Code',
     'html_type' => 'Text',
     'html_attributes' => array(
       'size' => 18,
@@ -71,4 +71,23 @@ return array(
     ),
     'quick_form_type' => 'Element',
   ),
+  'trackpaypal_event_category' => array(
+    'group_name' => 'trackpaypal',
+    'group' => 'trackpaypal',
+    'name' => 'trackpaypal_event_category',
+    'filter' => 'trackpaypal',
+    'type' => 'String',
+    'add' => '4.7',
+    'is_domain' => 1,
+    'is_contact' => 0,
+    'description' => 'Google Analytics Event Category term. Defaults to "Transaction" if blank.',
+    'title' => 'Event Category',
+    'html_type' => 'Text',
+    'html_attributes' => array(
+      'size' => 18,
+      'maxlength' => 16,
+    ),
+    'quick_form_type' => 'Element',
+  ),
+
 );
