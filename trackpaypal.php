@@ -216,7 +216,7 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
 
   // Retrieve extension settings
   $result = civicrm_api3('setting', 'get', ['return' => ['trackpaypal_event_type'],]);
-  $event_type = $result['values']['1']['trackpaypal_event_type'];
+  $event_type = Civi::settings->get('trackpaypal_event_type');
   $result = civicrm_api3('setting', 'get', ['return' => ['trackpaypal_tracking_code'],]);
   $tracking_code = $result['values']['1']['trackpaypal_tracking_code'];
 
