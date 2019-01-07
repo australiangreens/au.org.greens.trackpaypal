@@ -195,7 +195,6 @@ function trackpaypal_civicrm_alterPaymentProcessorParams($paymentObj,&$rawParams
     return;
   }
   else {
-    watchdog('paypal','Params: %params', array('%params' => print_r($cookedParams, true)), WATCHDOG_DEBUG);
     if (isset($cookedParams['custom'])) {
       // Add the Google Analytics client ID value
       // to the JSON encoded 'custom' attribute
@@ -212,7 +211,6 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   // Now we want to retrieve the Google Client ID
   // and transaction details to send to Google Analytics
   // via its REST interface
-  watchdog('paypal', 'IPN payload: %payload', array('%payload' => print_r($IPNData, TRUE)), WATCHDOG_DEBUG);
 
   // Retrieve extension settings
     $event_type = Civi::settings->get('trackpaypal_event_type');
@@ -221,7 +219,7 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   // Check the GA Code is of valid syntax
   // If not we do nothing
   if (!trackpaypal_isGACode($tracking_code)) {
-    watchdog('paypal', 'GA Code invalid: %code ', array('%code' => $tracking_code), WATCHDOG_DEBUG);
+    Civi::log()->warning('GA Code invalid: {code}', array('code' => $tracking_code));
     return;
   }
 
