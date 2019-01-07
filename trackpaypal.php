@@ -213,8 +213,8 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   // via its REST interface
 
   // Retrieve extension settings
-    $event_type = Civi::settings->get('trackpaypal_event_type');
-    $tracking_code = Civi::settings->get('trackpaypal_tracking_code');
+    $event_type = Civi::settings()->get('trackpaypal_event_type');
+    $tracking_code = Civi::settings()->get('trackpaypal_tracking_code');
 
   // Check the GA Code is of valid syntax
   // If not we do nothing
