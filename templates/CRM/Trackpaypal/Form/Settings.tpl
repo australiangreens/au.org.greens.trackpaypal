@@ -14,8 +14,10 @@
         {$trackpaypal_event_type_description}
       {elseif $elementName eq "trackpaypal_tracking_code"}
         {$trackpaypal_tracking_code_description}
-      {else}
+      {elseif $elementName eq "trackpaypal_event_category"}
         {$trackpaypal_event_category_description}
+      {else}
+        {$trackpaypal_debug_mode_description}
       {/if}
     </div>
     <div class="clear"></div>

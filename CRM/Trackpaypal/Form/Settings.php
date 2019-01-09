@@ -17,6 +17,13 @@ class CRM_Trackpaypal_Form_Settings extends CRM_Core_Form {
     );
   }
 
+  public static function debugMode() {
+    return array(
+      'on' => 'on',
+      'off' => 'off',
+    );
+  }
+
   private $_settingFilter = array('group' => 'trackpaypal');
   private $_submittedValues = array();
   private $_settings = array();

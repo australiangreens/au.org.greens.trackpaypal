@@ -89,5 +89,23 @@ return array(
     ),
     'quick_form_type' => 'Element',
   ),
+  'trackpaypal_debug_mode' => array(
+    'group_name' => 'trackpaypal',
+    'group' => 'trackpaypal',
+    'name' => 'trackpaypal_debug_mode',
+    'filter' => 'trackpaypal',
+    'type' => 'String',
+    'add' => '4.7',
+    'is_domain' => 1,
+    'is_contact' => 0,
+    'description' => 'Enable debug mode? Logs GA validation data to ConfigAndLog',
+    'title' => 'Debug mode',
+    'default' => array('off'),
+    'html_type' => 'Select',
+    'pseudoconstant' => array(
+      'callback' => 'CRM_Trackpaypal_Form_Settings::debugMode',
+    ),
+    'quick_form_type' => 'Element',
+  ),
 
 );
