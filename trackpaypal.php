@@ -195,6 +195,7 @@ function trackpaypal_civicrm_alterPaymentProcessorParams($paymentObj,&$rawParams
     return;
   }
   else {
+    $cookedParams['notify_url'] = 'http://mrlavalava.hopto.org:5555/civicrm/payment/ipn/3?';
     if (isset($cookedParams['custom'])) {
       // Add the Google Analytics client ID value
       // to the JSON encoded 'custom' attribute
@@ -269,17 +270,25 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
 
   if ($event_type == 'ecommerce') {
     $result = $client->request('POST', $endpoint, $packet_ecommerce);
-    if ($debug_mode == 'on') { trackpaypal_logValidation($result); }
+    if ($debug_mode == 'on') {
+      trackpaypal_logValidation($result);
+    }
   }
   else if ($event_type == 'standard') {
     $result = $client->request('POST', $endpoint, $packet_event);
-    if ($debug_mode == 'on') { trackpaypal_logValidation($result); }
+    if ($debug_mode == 'on') {
+      trackpaypal_logValidation($result);
+    }
   }
   else if ($event_type == 'both') {
     $result = $client->request('POST', $endpoint, $packet_ecommerce);
-    if ($debug_mode == 'on') { trackpaypal_logValidation($result); }
+    if ($debug_mode == 'on') {
+      trackpaypal_logValidation($result);
+    }
     $result = $client->request('POST', $endpoint, $packet_event);
-    if ($debug_mode == 'on') { trackpaypal_logValidation($result); }
+    if ($debug_mode == 'on') {
+      trackpaypal_logValidation($result);
+    }
   }
 }
 
