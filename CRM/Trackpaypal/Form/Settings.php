@@ -13,6 +13,14 @@ class CRM_Trackpaypal_Form_Settings extends CRM_Core_Form {
     return array(
       'standard' => 'standard',
       'ecommerce' => 'ecommerce',
+      'both' => 'both',
+    );
+  }
+
+  public static function debugMode() {
+    return array(
+      'on' => 'on',
+      'off' => 'off',
     );
   }
 

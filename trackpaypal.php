@@ -215,6 +215,9 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   // Retrieve extension settings
     $event_type = Civi::settings()->get('trackpaypal_event_type');
     $tracking_code = Civi::settings()->get('trackpaypal_tracking_code');
+    $event_category = Civi::settings()->get('trackpaypal_event_category');
+    if ($event_category = "") { $event_category = 'Transaction'; }
+    $debug_mode = Civi::settings()->get('trackpaypal_debug_mode');
 
   // Check the GA Code is of valid syntax
   // If not we do nothing
@@ -226,6 +229,7 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   // Retrieve IPN packet data
   $customPayload = json_decode($IPNData['custom'], TRUE);
   $gcid = $customPayload['gcid'];
+  $form_id = $customPayload['contributionPageID'];
   $trxn_id = $IPNData['txn_id'];
   $revenue = $IPNData['mc_gross'];
   $currency = $IPNData['mc_currency'];
@@ -233,9 +237,13 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   // Construct HTTP request object
   $client = new GuzzleHttp\Client(['base_uri' => 'https://www.google-analytics.com']);
 
-  if ($event_type == 'ecommerce') {
-    $result = $client->request('POST', '/collect', [
-      'form_params' => [
+  // Are we sending to the production service or the debug service?
+  $endpoint = ($debug_mode == 'on' ? '/debug/collect' : '/collect');
+
+  // Construct our two payload types: standard GA event and ecommerce transaction
+
+  $packet_ecommerce = [
+    'form_params' => [
         'v' => '1',
         'tid' => $tracking_code,
         'cid' => $gcid,
@@ -244,25 +252,54 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
         'tr' => $revenue,
         'cu' => $currency,
       ]
-    ]);
-  }
-  else if ($event_type == 'standard') {
-    $result = $client->request('POST', '/collect', [
-      'form_params' => [
+    ];
+
+  $packet_event = [
+    'form_params' => [
         'v' => '1',
-        'tid' => $tracking_cide,
+        'tid' => $tracking_code,
         'cid' => $gcid,
         't' => 'event',
-        'ec' => 'transaction',
+        'ec' => $event_category,
         'ea' => 'purchase',
-        'el' => $trxn_id,
-        'ev' => $revenue,
+        'el' => $form_id,
+        'ev' => $trxn_id,
       ]
-    ]);
-  }
+    ];
 
+  if ($event_type == 'ecommerce') {
+    $result = $client->request('POST', $endpoint, $packet_ecommerce);
+    if ($debug_mode == 'on') {
+      trackpaypal_logValidation($result);
+    }
+  }
+  else if ($event_type == 'standard') {
+    $result = $client->request('POST', $endpoint, $packet_event);
+    if ($debug_mode == 'on') {
+      trackpaypal_logValidation($result);
+    }
+  }
+  else if ($event_type == 'both') {
+    $result = $client->request('POST', $endpoint, $packet_ecommerce);
+    if ($debug_mode == 'on') {
+      trackpaypal_logValidation($result);
+    }
+    $result = $client->request('POST', $endpoint, $packet_event);
+    if ($debug_mode == 'on') {
+      trackpaypal_logValidation($result);
+    }
+  }
 }
 
 function trackpaypal_isGACode($str) {
   return (bool) preg_match('/^ua-\d{4,10}(-\d{1,4})?$/i', $str);
 }
+
+function trackpaypal_logValidation($response) {
+  if ($response->json()) {
+    Civi::log()->debug('GA validation response: {response}', array(
+      'response' => $response->json(),
+    ));
+  }
+}
+
