@@ -216,7 +216,7 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
     $event_type = Civi::settings()->get('trackpaypal_event_type');
     $tracking_code = Civi::settings()->get('trackpaypal_tracking_code');
     $event_category = Civi::settings()->get('trackpaypal_event_category');
-    if ($event_category = "") { $event_category = 'Transaction'; }
+    if ($event_category == "") { $event_category = 'Transaction'; }
     $debug_mode = Civi::settings()->get('trackpaypal_debug_mode');
 
   // Check the GA Code is of valid syntax
@@ -263,7 +263,7 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
         'ec' => $event_category,
         'ea' => 'purchase',
         'el' => $form_id,
-        'ev' => $trxn_id,
+        'ev' => floor(floatval($revenue)),
       ]
     ];
 
@@ -296,9 +296,9 @@ function trackpaypal_isGACode($str) {
 }
 
 function trackpaypal_logValidation($response) {
-  if ($response->json()) {
+  if ($response->getBody()) {
     Civi::log()->debug('GA validation response: {response}', array(
-      'response' => $response->json(),
+      'response' => $response->getBody(),
     ));
   }
 }
