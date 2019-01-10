@@ -4,12 +4,23 @@ All notable changes to this extension will be documented in this file.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
-## Unreleased
+## 1.0.0 - 2019-01-10
 
-* Fixed typo in variable name
-* New option to send ecommerce transaction _and_ event, alongside one or the other
+### Added
+
+* Can now send ecommerce transaction _and_ event data, or just one or the other
+* Can now set a custom Event Category value, defaults to "Transaction"
+* Debug mode - send data to Google Analytics hit validation service. Logs return data to Civi's ConfigAndLog
+
+### Changed
+
 * Simpler language for settings page field labels
-* Changed standard event label and value to use Civi form ID and PayPal trxn ID respectively
+* Standard event label and value now use Civi form ID and whole dollar amount of the transaction respectively
+
+### Fixed
+
+* Typo in variable name
+* Syntax error in category conditional check
 
 ## 0.1.0 - 2018-11-06
 
