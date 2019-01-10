@@ -1,5 +1,7 @@
 # au.org.greens.trackpaypal
 
+![Screenshot](/images/screenshot.png)
+
 This extension is designed to facilitate tracking of PayPal transactions in Google Analytics
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
