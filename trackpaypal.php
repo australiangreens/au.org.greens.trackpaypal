@@ -227,8 +227,9 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   }
 
   // Retrieve IPN packet data
+  // We're constructing a fake $gcid if none is present in the payload
   $customPayload = json_decode($IPNData['custom'], TRUE);
-  $gcid = $customPayload['gcid'];
+  $gcid = ($customPayload['gcid'] ? $customPayload['gcid'] : mt_rand(100000000,999999999) . '.' . time();
   $form_id = $customPayload['contributionPageID'];
   $trxn_id = $IPNData['txn_id'];
   $revenue = $IPNData['mc_gross'];
