@@ -303,7 +303,7 @@ function trackpaypal_isGACode($str) {
 function trackpaypal_logValidation($response) {
   if ($response->getBody()) {
     Civi::log()->debug('GA validation response: {response}', array(
-      'response' => $response->getBody(),
+      'response' => $response->getBody()->getContents(),
     ));
   }
 }
