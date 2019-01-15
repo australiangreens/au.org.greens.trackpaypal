@@ -98,7 +98,7 @@ return array(
     'add' => '4.7',
     'is_domain' => 1,
     'is_contact' => 0,
-    'description' => 'Enable debug mode? Logs GA validation data to ConfigAndLog. Data will only be validated by GA and not recorded.',
+    'description' => 'Enable debug mode? Logs GA validation data to ConfigAndLog. Data will sent to GA as well.',
     'title' => 'Debug mode',
     'default' => array('off'),
     'html_type' => 'Select',
