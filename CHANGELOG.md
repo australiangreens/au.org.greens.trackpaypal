@@ -4,6 +4,13 @@ All notable changes to this extension will be documented in this file.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
+## 1.1.1 - 2019-01-15
+
+### Fixed
+
+* Properly log validation response data using `getContents()` method
+* Use correct endpoint variable in debug call
+
 ## 1.1.0 - 2019-01-15
 
 ### Changed

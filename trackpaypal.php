@@ -290,7 +290,7 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
     }
     $result = $client->request('POST', $endpoint, $packet_event);
     if ($debug_mode == 'on') {
-      $result = $client->request('POST', $endpoint, $packet_event);
+      $result = $client->request('POST', $endpoint_debug, $packet_event);
       trackpaypal_logValidation($result);
     }
   }
