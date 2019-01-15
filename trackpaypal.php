@@ -237,8 +237,9 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   // Construct HTTP request object
   $client = new GuzzleHttp\Client(['base_uri' => 'https://www.google-analytics.com']);
 
-  // Are we sending to the production service or the debug service?
-  $endpoint = ($debug_mode == 'on' ? '/debug/collect' : '/collect');
+  // Define our endpoints (production and debug)
+  $endpoint = '/collect';
+  $endpoint_debug = '/debug/collect';
 
   // Construct our two payload types: standard GA event and ecommerce transaction
 
@@ -270,22 +271,26 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   if ($event_type == 'ecommerce') {
     $result = $client->request('POST', $endpoint, $packet_ecommerce);
     if ($debug_mode == 'on') {
+      $result = $client->request('POST', $endpoint_debug, $packet_ecommerce);
       trackpaypal_logValidation($result);
     }
   }
   else if ($event_type == 'standard') {
     $result = $client->request('POST', $endpoint, $packet_event);
     if ($debug_mode == 'on') {
+      $result = $client->request('POST', $endpoint_debug, $packet_event);
       trackpaypal_logValidation($result);
     }
   }
   else if ($event_type == 'both') {
     $result = $client->request('POST', $endpoint, $packet_ecommerce);
     if ($debug_mode == 'on') {
+      $result = $client->request('POST', $endpoint_debug, $packet_ecommerce);
       trackpaypal_logValidation($result);
     }
     $result = $client->request('POST', $endpoint, $packet_event);
     if ($debug_mode == 'on') {
+      $result = $client->request('POST', $endpoint, $packet_event);
       trackpaypal_logValidation($result);
     }
   }

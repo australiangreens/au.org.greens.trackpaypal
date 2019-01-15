@@ -4,6 +4,12 @@ All notable changes to this extension will be documented in this file.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
+## 1.1.0 - 2019-01-15
+
+### Changed
+
+* Changed debug mode behaviour - extension will send data to GA _AND_ the GA validation service
+
 ## 1.0.0 - 2019-01-10
 
 ### Added
