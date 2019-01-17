@@ -4,6 +4,10 @@ All notable changes to this extension will be documented in this file.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
+## 1.1.3 - 2019-01-17
+
+* Fixed syntax error
+
 ## 1.1.2 - 2019-01-16
 
 ### Fixed
