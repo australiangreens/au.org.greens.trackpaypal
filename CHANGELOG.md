@@ -4,6 +4,12 @@ All notable changes to this extension will be documented in this file.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
+## 1.1.2 - 2019-01-16
+
+### Fixed
+
+* Construct fake gcid if none is present in IPN payload to ensure event packets are accepted by GA
+
 ## 1.1.1 - 2019-01-15
 
 ### Fixed
