@@ -62,7 +62,7 @@ return array(
     'add' => '4.7',
     'is_domain' => 1,
     'is_contact' => 0,
-    'description' => 'Google Analytics tracking code (UA-XXXXXX-X)',
+    'description' => 'Google Analytics tracking code (similar to UA-XXXXXX-X)',
     'title' => 'Tracking Code',
     'html_type' => 'Text',
     'html_attributes' => array(

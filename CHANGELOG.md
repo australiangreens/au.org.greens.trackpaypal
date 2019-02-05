@@ -4,13 +4,26 @@ All notable changes to this extension will be documented in this file.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
+## 1.1.4 - 2019-02-05
+
+### Changed
+
+* Updated README.md and screenshot
+* Tweaked help text on settings form
+
+### Fixed
+
+* Corrected CiviCRM version compatibility statements in README.md and info.xml
+
 ## 1.1.3 - 2019-01-17
+
+### Fixed
 
 * Fixed syntax error
 
 ## 1.1.2 - 2019-01-16
 
-### Fixed
+### Changed
 
 * Construct fake gcid if none is present in IPN payload to ensure event packets are accepted by GA
 
