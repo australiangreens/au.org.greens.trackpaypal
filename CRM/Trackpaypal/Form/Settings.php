@@ -27,6 +27,7 @@ class CRM_Trackpaypal_Form_Settings extends CRM_Core_Form {
   private $_settingFilter = array('group' => 'trackpaypal');
   private $_submittedValues = array();
   private $_settings = array();
+
   public function buildQuickForm() {
     $settings = $this->getFormSettings();
     foreach ($settings as $name => $setting) {
@@ -54,7 +55,7 @@ class CRM_Trackpaypal_Form_Settings extends CRM_Core_Form {
     $this->addButtons(array(
       array(
         'type' => 'submit',
-        'name' => ts('Submit'),
+        'name' => E::ts('Submit'),
         'isDefault' => TRUE,
       ),
     ));
@@ -62,11 +63,13 @@ class CRM_Trackpaypal_Form_Settings extends CRM_Core_Form {
     $this->assign('elementNames', $this->getRenderableElementNames());
     parent::buildQuickForm();
   }
+
   public function postProcess() {
     $this->_submittedValues = $this->exportValues();
     $this->saveSettings();
     parent::postProcess();
   }
+
   /**
    * Get the fields/elements defined in this form.
    *
@@ -86,6 +89,7 @@ class CRM_Trackpaypal_Form_Settings extends CRM_Core_Form {
     }
     return $elementNames;
   }
+
   /**
    * Get the settings we are going to allow to be set on this form.
    *
@@ -97,6 +101,7 @@ class CRM_Trackpaypal_Form_Settings extends CRM_Core_Form {
     }
     return $settings['values'];
   }
+
   /**
    * Get the settings we are going to allow to be set on this form.
    */
@@ -105,6 +110,7 @@ class CRM_Trackpaypal_Form_Settings extends CRM_Core_Form {
     $values = array_intersect_key($this->_submittedValues, $settings);
     civicrm_api3('setting', 'create', $values);
   }
+
   /**
    * Set defaults for form.
    *

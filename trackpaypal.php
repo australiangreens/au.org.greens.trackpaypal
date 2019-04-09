@@ -134,17 +134,6 @@ function trackpaypal_civicrm_entityTypes(&$entityTypes) {
   _trackpaypal_civix_civicrm_entityTypes($entityTypes);
 }
 
-// --- Functions below this ship commented out. Uncomment as required. ---
-
-/**
- * Implements hook_civicrm_preProcess().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
- *
-function trackpaypal_civicrm_preProcess($formName, &$form) {
-
-} // */
-
 /**
  * Implements hook_civicrm_navigationMenu().
  *
@@ -188,7 +177,7 @@ function trackpaypal_civicrm_buildForm($formName, &$form) {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterPaymentProcessorParams/
  */
-function trackpaypal_civicrm_alterPaymentProcessorParams($paymentObj,&$rawParams, &$cookedParams) {
+function trackpaypal_civicrm_alterPaymentProcessorParams($paymentObj, &$rawParams, &$cookedParams) {
   // Eway Payment Processor sometimes passes $cookedParams as an instance of GatewayRequest class
   // PHP complains if you try and use it as an array and we don't care about it in this instnce so return.
   if ($cookedParams instanceof GatewayRequest) {
@@ -213,11 +202,13 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   // via its REST interface
 
   // Retrieve extension settings
-    $event_type = Civi::settings()->get('trackpaypal_event_type');
-    $tracking_code = Civi::settings()->get('trackpaypal_tracking_code');
-    $event_category = Civi::settings()->get('trackpaypal_event_category');
-    if ($event_category == "") { $event_category = 'Transaction'; }
-    $debug_mode = Civi::settings()->get('trackpaypal_debug_mode');
+  $event_type = Civi::settings()->get('trackpaypal_event_type');
+  $tracking_code = Civi::settings()->get('trackpaypal_tracking_code');
+  $event_category = Civi::settings()->get('trackpaypal_event_category');
+  if ($event_category == "") {
+    $event_category = 'Transaction';
+  }
+  $debug_mode = Civi::settings()->get('trackpaypal_debug_mode');
 
   // Check the GA Code is of valid syntax
   // If not we do nothing
@@ -246,28 +237,28 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
 
   $packet_ecommerce = [
     'form_params' => [
-        'v' => '1',
-        'tid' => $tracking_code,
-        'cid' => $gcid,
-        't' => 'transaction',
-        'ti' => $trxn_id,
-        'tr' => $revenue,
-        'cu' => $currency,
-      ]
-    ];
+      'v' => '1',
+      'tid' => $tracking_code,
+      'cid' => $gcid,
+      't' => 'transaction',
+      'ti' => $trxn_id,
+      'tr' => $revenue,
+      'cu' => $currency,
+    ],
+  ];
 
   $packet_event = [
     'form_params' => [
-        'v' => '1',
-        'tid' => $tracking_code,
-        'cid' => $gcid,
-        't' => 'event',
-        'ec' => $event_category,
-        'ea' => 'purchase',
-        'el' => $form_id,
-        'ev' => floor(floatval($revenue)),
-      ]
-    ];
+      'v' => '1',
+      'tid' => $tracking_code,
+      'cid' => $gcid,
+      't' => 'event',
+      'ec' => $event_category,
+      'ea' => 'purchase',
+      'el' => $form_id,
+      'ev' => floor(floatval($revenue)),
+    ],
+  ];
 
   if ($event_type == 'ecommerce') {
     $result = $client->request('POST', $endpoint, $packet_ecommerce);
@@ -276,14 +267,14 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
       trackpaypal_logValidation($result);
     }
   }
-  else if ($event_type == 'standard') {
+  elseif ($event_type == 'standard') {
     $result = $client->request('POST', $endpoint, $packet_event);
     if ($debug_mode == 'on') {
       $result = $client->request('POST', $endpoint_debug, $packet_event);
       trackpaypal_logValidation($result);
     }
   }
-  else if ($event_type == 'both') {
+  elseif ($event_type == 'both') {
     $result = $client->request('POST', $endpoint, $packet_ecommerce);
     if ($debug_mode == 'on') {
       $result = $client->request('POST', $endpoint_debug, $packet_ecommerce);
@@ -308,4 +299,3 @@ function trackpaypal_logValidation($response) {
     ));
   }
 }
-
