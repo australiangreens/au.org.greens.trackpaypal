@@ -1,5 +1,10 @@
 # au.org.greens.trackpaypal
 
+## Project now unsupported
+
+This project is now archived and unsupported. We recommend the use of the newer
+[Google Tag Manager extension](https://lab.civicrm.org/extensions/gtmtracking).
+
 ![Screenshot](/images/screenshot.png)
 
 This extension is designed to facilitate tracking of PayPal transactions in Google Analytics
