@@ -141,14 +141,14 @@ function trackpaypal_civicrm_entityTypes(&$entityTypes) {
  *
  */
 function trackpaypal_civicrm_navigationMenu(&$menu) {
-  _trackpaypal_civix_insert_navigation_menu($menu, 'Administer', array(
+  _trackpaypal_civix_insert_navigation_menu($menu, 'Administer', [
     'label' => E::ts('PayPal Tracking'),
     'name' => 'trackpaypal_settings',
     'url' => 'civicrm/trackpaypal/settings',
     'permission' => 'administer CiviCRM',
     'operator' => 'OR',
     'separator' => 0,
-  ));
+  ]);
   _trackpaypal_civix_navigationMenu($menu);
 }
 
@@ -166,9 +166,9 @@ function trackpaypal_civicrm_buildForm($formName, &$form) {
     // with the Google Analytics client from the visitor's browser
     $templatePath = realpath(dirname(__FILE__) . "/templates");
     $form->add('hidden', 'gcid', '');
-    CRM_Core_Region::instance('page-body')->add(array(
+    CRM_Core_Region::instance('page-body')->add([
       'template' => "{$templatePath}/trackpaypal.tpl",
-    ));
+    ]);
   }
 }
 
@@ -214,7 +214,7 @@ function trackpaypal_civicrm_postIPNProcess(&$IPNData) {
   // Check the GA Code is of valid syntax
   // If not we do nothing
   if (!trackpaypal_isGACode($tracking_code)) {
-    Civi::log()->warning('GA Code invalid: {code}', array('code' => $tracking_code));
+    Civi::log()->warning('GA Code invalid: {code}', ['code' => $tracking_code]);
     return;
   }
 
@@ -295,8 +295,8 @@ function trackpaypal_isGACode($str) {
 
 function trackpaypal_logValidation($response) {
   if ($response->getBody()) {
-    Civi::log()->debug('GA validation response: {response}', array(
+    Civi::log()->debug('GA validation response: {response}', [
       'response' => $response->getBody()->getContents(),
-    ));
+    ]);
   }
 }

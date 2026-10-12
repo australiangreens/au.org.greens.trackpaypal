@@ -34,8 +34,8 @@
 /*
  * Settings metadata file
  */
-return array(
-  'trackpaypal_event_type' => array(
+return [
+  'trackpaypal_event_type' => [
     'group_name' => 'trackpaypal',
     'group' => 'trackpaypal',
     'name' => 'trackpaypal_event_type',
@@ -46,14 +46,14 @@ return array(
     'is_contact' => 0,
     'description' => 'Send eCommerce Transaction, standard Event or both to Google Analytics?',
     'title' => 'Data to send to GA',
-    'default' => array('ecommerce'),
+    'default' => ['ecommerce'],
     'html_type' => 'Select',
-    'pseudoconstant' => array(
+    'pseudoconstant' => [
       'callback' => 'CRM_Trackpaypal_Form_Settings::eventTypes',
-    ),
+    ],
     'quick_form_type' => 'Element',
-  ),
-  'trackpaypal_tracking_code' => array(
+  ],
+  'trackpaypal_tracking_code' => [
     'group_name' => 'trackpaypal',
     'group' => 'trackpaypal',
     'name' => 'trackpaypal_tracking_code',
@@ -65,13 +65,13 @@ return array(
     'description' => 'Google Analytics tracking code (similar to UA-XXXXXX-X)',
     'title' => 'Tracking Code',
     'html_type' => 'Text',
-    'html_attributes' => array(
+    'html_attributes' => [
       'size' => 18,
       'maxlength' => 16,
-    ),
+    ],
     'quick_form_type' => 'Element',
-  ),
-  'trackpaypal_event_category' => array(
+  ],
+  'trackpaypal_event_category' => [
     'group_name' => 'trackpaypal',
     'group' => 'trackpaypal',
     'name' => 'trackpaypal_event_category',
@@ -83,13 +83,13 @@ return array(
     'description' => 'Google Analytics Event Category term. Defaults to "Transaction" if blank.',
     'title' => 'Event Category',
     'html_type' => 'Text',
-    'html_attributes' => array(
+    'html_attributes' => [
       'size' => 18,
       'maxlength' => 16,
-    ),
+    ],
     'quick_form_type' => 'Element',
-  ),
-  'trackpaypal_debug_mode' => array(
+  ],
+  'trackpaypal_debug_mode' => [
     'group_name' => 'trackpaypal',
     'group' => 'trackpaypal',
     'name' => 'trackpaypal_debug_mode',
@@ -100,12 +100,12 @@ return array(
     'is_contact' => 0,
     'description' => 'Enable debug mode? Logs GA validation data to ConfigAndLog. Data will sent to GA as well.',
     'title' => 'Debug mode',
-    'default' => array('off'),
+    'default' => ['off'],
     'html_type' => 'Select',
-    'pseudoconstant' => array(
+    'pseudoconstant' => [
       'callback' => 'CRM_Trackpaypal_Form_Settings::debugMode',
-    ),
+    ],
     'quick_form_type' => 'Element',
-  ),
+  ],
 
-);
+];
